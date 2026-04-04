@@ -1,0 +1,35 @@
+{
+  "name": "@ppg/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "ppg": "./dist/index.js",
+    "private-pay": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ppg/shared": "*",
+    "@x402/core": "^2.9.0",
+    "@x402/svm": "^2.9.0",
+    "@solana/kit": "^5.1.0",
+    "commander": "^13.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0",
+    "tsx": "^4.19.0"
+  }
+}

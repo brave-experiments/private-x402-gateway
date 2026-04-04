@@ -1,0 +1,41 @@
+services:
+  relay:
+    build: .
+    command: node packages/relay/dist/index.js
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - TARGET_URL=http://gateway:3001
+    depends_on:
+      gateway:
+        condition: service_started
+
+  gateway:
+    build: .
+    command: node packages/gateway/dist/index.js
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - SHARED_KEYS_DIR=/app/.keys
+      - FACILITATOR_URL=http://facilitator:3002
+    volumes:
+      - ppg-keys:/app/.keys
+    depends_on:
+      facilitator:
+        condition: service_started
+
+  facilitator:
+    build: .
+    command: node packages/facilitator/dist/index.js
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - SHARED_KEYS_DIR=/app/.keys
+    volumes:
+      - ppg-keys:/app/.keys
+
+volumes:
+  ppg-keys:
