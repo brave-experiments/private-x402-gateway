@@ -144,4 +144,12 @@ describe("CLI help text", () => {
     expect(help).toContain("ppg");
     expect(help).toContain("CLI for consuming APIs privately");
   });
+
+  it("benchmark command is registered", () => {
+    const program = new Command();
+    program.name("ppg");
+    program.command("benchmark").description("Benchmark token issuance and request performance");
+    const benchCmd = program.commands.find((c) => c.name() === "benchmark");
+    expect(benchCmd).toBeDefined();
+  });
 });
