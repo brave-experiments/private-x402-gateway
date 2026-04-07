@@ -6,6 +6,9 @@ import { balanceAction } from "./commands/balance.js";
 import { clearTokensAction } from "./commands/clear-tokens.js";
 import { genPaymentKeyAction } from "./commands/gen-payment-key.js";
 import { fundAccountAction } from "./commands/fund-account.js";
+import { benchmarkIssue } from "./commands/benchmark/issue.js";
+import { benchmarkRequest } from "./commands/benchmark/request.js";
+import { benchmarkFull } from "./commands/benchmark/full.js";
 
 const program = new Command();
 
@@ -116,5 +119,67 @@ program
       process.exit(1);
     }
   });
+
+program
+  .command("benchmark")
+  .description("Benchmark token issuance and request performance")
+  .option("--no-relay", "Bypass OHTTP relay, hit services directly")
+  .addCommand(
+    new Command("issue")
+      .description("Benchmark token issuance flow")
+      .option("--iterations <n>", "Number of iterations", "5")
+      .action(async (opts) => {
+        const globalOpts = program.opts();
+        const benchOpts = program.commands.find((c) => c.name() === "benchmark")!.opts();
+        try {
+          await benchmarkIssue({
+            facilitator: globalOpts.facilitator,
+            relay: globalOpts.relay,
+            noRelay: benchOpts.noRelay,
+            iterations: parseInt(opts.iterations, 10),
+          });
+        } catch (err) {
+          console.error(err instanceof Error ? err.message : err);
+          process.exit(1);
+        }
+      }),
+  )
+  .addCommand(
+    new Command("request")
+      .description("Benchmark token-bearing requests")
+      .option("--count <n>", "Number of requests", "1")
+      .action(async (opts) => {
+        const globalOpts = program.opts();
+        const benchOpts = program.commands.find((c) => c.name() === "benchmark")!.opts();
+        try {
+          await benchmarkRequest({
+            relay: globalOpts.relay,
+            noRelay: benchOpts.noRelay,
+            count: parseInt(opts.count, 10),
+          });
+        } catch (err) {
+          console.error(err instanceof Error ? err.message : err);
+          process.exit(1);
+        }
+      }),
+  )
+  .addCommand(
+    new Command("full")
+      .description("Run full benchmark: issue + single request + 1000 requests")
+      .action(async () => {
+        const globalOpts = program.opts();
+        const benchOpts = program.commands.find((c) => c.name() === "benchmark")!.opts();
+        try {
+          await benchmarkFull({
+            facilitator: globalOpts.facilitator,
+            relay: globalOpts.relay,
+            noRelay: benchOpts.noRelay,
+          });
+        } catch (err) {
+          console.error(err instanceof Error ? err.message : err);
+          process.exit(1);
+        }
+      }),
+  );
 
 program.parse();
