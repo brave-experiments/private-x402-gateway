@@ -7,9 +7,26 @@ services:
     environment:
       - PORT=3000
       - TARGET_URL=http://gateway:3001
+      - REDIS_URL=redis://redis:6379
+      - RATE_LIMIT_WINDOW_MS=1000
+      - RATE_LIMIT_MAX=15
     depends_on:
+      redis:
+        condition: service_started
       gateway:
         condition: service_started
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ppg-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   gateway:
     build: .
@@ -39,3 +56,4 @@ services:
 
 volumes:
   ppg-keys:
+  ppg-redis:
