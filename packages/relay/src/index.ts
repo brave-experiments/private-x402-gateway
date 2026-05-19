@@ -1,4 +1,5 @@
 import express from "express";
+import { relayRateLimiter } from "./middleware/rate-limit.js";
 
 const TARGET_URL = process.env.TARGET_URL || "http://localhost:3001";
 const PORT = parseInt(process.env.PORT || "3000");
@@ -23,6 +24,11 @@ function resolveTarget(rawTarget: string): string {
 }
 
 const app = express();
+if (process.env.TRUST_PROXY === "true") {
+  app.set("trust proxy", true);
+}
+app.set("trust proxy", true);
+app.use(relayRateLimiter);
 app.use(express.raw({ type: "message/ohttp-req", limit: "1mb" }));
 
 app.post("/", async (req, res) => {
