@@ -1,4 +1,4 @@
-# Private Payments Gateway
+# Private X402 Gateway
 
 Private API consumption using [x402](https://github.com/X402Protocol/x402) payments, [Privacy Pass](https://datatracker.ietf.org/doc/html/rfc9576) tokens, and [OHTTP](https://datatracker.ietf.org/doc/html/rfc9458) relay. No entity can link payments to API usage or client identity.
 
