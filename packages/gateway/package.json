@@ -20,7 +20,7 @@
     "@ppg/shared": "*",
     "@x402/core": "^2.9.0",
     "express": "^5.1.0",
-    "zod": "^3.24.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "typescript": "^5.8.0",

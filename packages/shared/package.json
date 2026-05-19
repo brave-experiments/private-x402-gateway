@@ -23,7 +23,7 @@
     "@x402/core": "^2.9.0",
     "hpke": "1.0.6",
     "ohttp-ts": "^0.3.0",
-    "zod": "^3.24.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "typescript": "^5.8.0",
