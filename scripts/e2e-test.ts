@@ -99,7 +99,7 @@ async function runE2E() {
       if (!wwwAuth?.includes("PrivateToken")) throw new Error("Missing PrivateToken");
       if (!wwwAuth.includes("challenge=")) throw new Error("Missing challenge");
       if (!wwwAuth.includes("token-key=")) throw new Error("Missing token-key");
-      if (!res.headers.get("x-payment-required")) throw new Error("Missing X-Payment-Required");
+      if (!res.headers.get("payment-required")) throw new Error("Missing Payment-Required");
       console.log("   PASS");
     },
   });
