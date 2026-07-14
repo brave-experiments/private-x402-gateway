@@ -47,7 +47,7 @@ export async function buyTokensAction(options: {
   const challenge = deserializeTokenChallenge(base64UrlToUint8Array(challengeB64));
   const challengeDigest = hashTokenChallenge(challenge);
 
-  const paymentRequiredHeader = gatewayResp.headers.get("X-Payment-Required");
+  const paymentRequiredHeader = gatewayResp.headers.get("Payment-Required");
   const rawRequirements = paymentRequiredHeader
     ? (() => {
         const parsed = JSON.parse(Buffer.from(paymentRequiredHeader, "base64").toString());

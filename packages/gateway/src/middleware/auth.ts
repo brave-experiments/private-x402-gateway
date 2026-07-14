@@ -68,7 +68,7 @@ export function createAuthMiddleware(
         .status(402)
         .set({
           "WWW-Authenticate": `PrivateToken challenge="${challengeB64}", token-key="${pubkeyB64}"`,
-          "X-Payment-Required": paymentB64,
+          "Payment-Required": paymentB64,
         })
         .json({ error: "Payment required", paymentRequired });
       return;

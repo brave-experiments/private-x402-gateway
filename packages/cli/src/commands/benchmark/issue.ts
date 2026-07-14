@@ -60,7 +60,7 @@ export async function benchmarkIssue(options: {
 
     t.start("payment");
     const paymentClient = new PaymentClient();
-    const paymentRequiredHeader = gatewayResp.headers.get("X-Payment-Required");
+    const paymentRequiredHeader = gatewayResp.headers.get("Payment-Required");
     const rawRequirements = paymentRequiredHeader
       ? (() => {
           const parsed = JSON.parse(Buffer.from(paymentRequiredHeader, "base64").toString());

@@ -129,10 +129,10 @@ async function fetchRequirementsOHTTP(
   httpClient: OHTTPClient,
 ): Promise<PaymentRequirements> {
   const resp = await httpClient.request(url, {});
-  const paymentRequired = resp.headers.get("X-Payment-Required");
+  const paymentRequired = resp.headers.get("Payment-Required");
   if (!paymentRequired) {
     throw new Error(
-      `Missing X-Payment-Required header in 402 response. Status was ${resp.status}.`,
+      `Missing Payment-Required header in 402 response. Status was ${resp.status}.`,
     );
   }
   const parsed = JSON.parse(Buffer.from(paymentRequired, "base64").toString());
