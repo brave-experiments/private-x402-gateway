@@ -1,15 +1,31 @@
 import { ExactSvmScheme } from "@x402/svm/exact/facilitator";
 import { toFacilitatorSvmSigner } from "@x402/svm";
 import type { PaymentRequirements, PaymentPayload } from "@x402/core/types";
+import { CasperPaymentService } from "./casper-payment.js";
+
+/** Settlement chain selected by PPG_CHAIN. Defaults to Solana. */
+function selectedChain(): string {
+  return (process.env.PPG_CHAIN || "solana").toLowerCase();
+}
 
 function isMockMode(): boolean {
-  return !process.env.PPG_SOLANA_PRIVATE_KEY;
+  return selectedChain() !== "casper" && !process.env.PPG_SOLANA_PRIVATE_KEY;
 }
 
 export class PaymentService {
   private scheme: ExactSvmScheme | null = null;
+  private casper: CasperPaymentService | null = null;
 
   async init(): Promise<void> {
+    if (selectedChain() === "casper") {
+      this.casper = new CasperPaymentService();
+      console.log(
+        `[PaymentService] Running in Casper mode via ${this.casper.baseUrl} ` +
+          `(${this.casper.paymentRequirements.network})`,
+      );
+      return;
+    }
+
     if (isMockMode()) {
       console.log("[PaymentService] Running in mock mode (no PPG_SOLANA_PRIVATE_KEY)");
       return;
@@ -30,6 +46,11 @@ export class PaymentService {
   async verifyPayment(
     paymentPayload: unknown,
   ): Promise<{ isValid: boolean; payer?: string }> {
+    if (this.casper) {
+      const result = await this.casper.verifyPayment(paymentPayload);
+      return { isValid: result.isValid, payer: result.payer };
+    }
+
     if (isMockMode() || !this.scheme) {
       void paymentPayload;
       return { isValid: true, payer: "mock-payer" };
@@ -58,6 +79,15 @@ export class PaymentService {
   async settlePayment(
     paymentPayload: unknown,
   ): Promise<{ success: boolean; transaction: string; network: string }> {
+    if (this.casper) {
+      const result = await this.casper.settlePayment(paymentPayload);
+      return {
+        success: result.success,
+        transaction: result.transaction,
+        network: result.network,
+      };
+    }
+
     if (isMockMode() || !this.scheme) {
       void paymentPayload;
       return {
