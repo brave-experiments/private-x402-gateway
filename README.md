@@ -24,6 +24,22 @@ private-pay request http://localhost:3001/api/weather --auto-purchase
 
 Global flags: `--facilitator <url>`, `--relay <url>`.
 
+## Settlement Networks
+
+The facilitator settles payments on Solana by default. Set `PPG_CHAIN=casper` to
+settle x402 `exact` payments on the Casper Network instead, using wCSPR (a CEP-18
+token with 9 decimals, base unit = mote) via the CSPR.cloud x402 facilitator.
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PPG_CHAIN` | `solana` | Settlement chain: `solana` or `casper` |
+| `PPG_CASPER_NETWORK` | `casper:casper-test` | CAIP-2 network: `casper:casper` or `casper:casper-test` |
+| `PPG_CASPER_FACILITATOR_URL` | `https://x402-facilitator.cspr.cloud` | x402 facilitator base URL |
+| `PPG_CASPER_ACCESS_TOKEN` | — | CSPR.cloud access token |
+| `PPG_CASPER_ASSET` | — | wCSPR CEP-18 contract package hash (64 hex chars) |
+| `PPG_CASPER_PAY_TO` | — | Recipient account hash (`00` + 64 hex chars) |
+| `PPG_PRICE_AMOUNT` | `1000000` | Price in motes |
+
 ## Services (Docker)
 
 | Port | Service | Role |
