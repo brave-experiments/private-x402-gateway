@@ -81,4 +81,26 @@ export {
 } from "./types/x402.js";
 export type { TokenChallenge, Token, IssueRequest, IssueResponse, ProtectedRequest, StandardTokenRequest, StandardTokenResponse, IssuerDirectory, IssuerTokenKey } from "./types/x402.js";
 
+export {
+  NETWORK_CASPER_MAINNET,
+  NETWORK_CASPER_TESTNET,
+  CASPER_NETWORKS,
+  CASPER_SCHEME_EXACT,
+  CASPER_MIN_TIMEOUT_SECONDS,
+  WCSPR_DECIMALS,
+  MOTES_PER_CSPR,
+  isCasperNetwork,
+  getCasperNetworkConfig,
+  isValidCasperAccountHash,
+  isValidCasperContractPackageHash,
+  csprToMotes,
+  motesToCspr,
+  buildCasperPaymentRequirements,
+} from "./chains/casper.js";
+export type {
+  CasperNetwork,
+  CasperNetworkConfig,
+  CasperPaymentRequirementsInput,
+} from "./chains/casper.js";
+
 export type { ProtocolConfig } from "./types/protocol.js";
